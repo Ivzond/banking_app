@@ -34,7 +34,7 @@ func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccoun
 
 	// Prepare response
 	var token = prepareToken(user)
-	var response = map[string]interface{}{"message": "Authentication is fine"}
+	var response = map[string]interface{}{"message": "OK"}
 	response["jwt"] = token
 	response["data"] = responseUser
 
@@ -85,5 +85,53 @@ func Login(username string, pass string) map[string]interface{} {
 }
 
 func Register(username string, email string, pass string) map[string]interface{} {
+	// Validation to register
+	valid := helpers.Validation(
+		[]interfaces.Validation{
+			{
+				Value: username,
+				Valid: "username",
+			},
+			{
+				Value: email,
+				Valid: "email",
+			},
+			{
+				Value: pass,
+				Valid: "password",
+			},
+		},
+	)
+	if valid {
+		db := helpers.ConnectDB()
+		generatedPassword := helpers.HashAndSalt([]byte(pass))
+		user := &interfaces.User{
+			Username: username,
+			Email:    email,
+			Password: generatedPassword,
+		}
+		db.Create(&user)
 
+		account := interfaces.Account{
+			Type:    "Daily account",
+			Name:    username + "'s " + "account",
+			Balance: 0,
+			UserID:  user.ID,
+		}
+		db.Create(&account)
+		defer db.Close()
+
+		accounts := []interfaces.ResponseAccount{}
+		respAccount := interfaces.ResponseAccount{
+			ID:      account.ID,
+			Name:    account.Name,
+			Balance: account.Balance,
+		}
+		accounts = append(accounts, respAccount)
+		var response = prepareResponse(user, accounts)
+
+		return response
+	} else {
+		return map[string]interface{}{"message": "not valid values"}
+	}
 }

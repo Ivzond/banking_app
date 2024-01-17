@@ -24,7 +24,7 @@ func HashAndSalt(pass []byte) string {
 func ConnectDB() *gorm.DB {
 	db, err := gorm.Open(
 		"postgres",
-		"host=127.0.0.1 port=5432 user=postgres dbname=bankapp password=12345678",
+		"host=localhost port=5432 user=postgres dbname=bankapp password=12345678",
 	)
 	HandlerErr(err)
 	return db
@@ -32,7 +32,7 @@ func ConnectDB() *gorm.DB {
 
 func Validation(values []interfaces.Validation) bool {
 	username := regexp.MustCompile(`^([A-Za-z0-9]{5,})+$`)
-	email := regexp.MustCompile(`^[A-Za-z0-9]+[@]+[A-Za-z0-9]+[.]+[A-Za-z]+$`)
+	email := regexp.MustCompile(`^[A-Za-z0-9]+@+[A-Za-z0-9]+[.]+[A-Za-z]+$`)
 
 	for i := 0; i < len(values); i++ {
 		switch values[i].Valid {
@@ -45,7 +45,7 @@ func Validation(values []interfaces.Validation) bool {
 				return false
 			}
 		case "password":
-			if len(values[i].Value) < 6 {
+			if len(values[i].Value) < 5 {
 				return false
 			}
 		}
