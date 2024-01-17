@@ -5,6 +5,7 @@ import (
 	"fintech_app/helpers"
 	"fintech_app/interfaces"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -74,7 +75,10 @@ func Login(username string, pass string) map[string]interface{} {
 		accounts := []interfaces.ResponseAccount{}
 		db.Table("accounts").Select("id, name, balance").Where("user_id = ?", user.ID).Scan(&accounts)
 
-		defer db.Close()
+		defer func(db *gorm.DB) {
+			err := db.Close()
+			helpers.HandlerErr(err)
+		}(db)
 
 		var response = prepareResponse(user, accounts)
 
@@ -119,7 +123,10 @@ func Register(username string, email string, pass string) map[string]interface{}
 			UserID:  user.ID,
 		}
 		db.Create(&account)
-		defer db.Close()
+		defer func(db *gorm.DB) {
+			err := db.Close()
+			helpers.HandlerErr(err)
+		}(db)
 
 		accounts := []interfaces.ResponseAccount{}
 		respAccount := interfaces.ResponseAccount{
