@@ -3,6 +3,7 @@ package migrations
 import (
 	"fintech_app/helpers"
 	"fintech_app/interfaces"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -40,7 +41,12 @@ func createAccounts() {
 		}
 		db.Create(&account)
 	}
-	defer db.Close()
+	defer func(db *gorm.DB) {
+		err := db.Close()
+		if err != nil {
+			helpers.HandleErr(err)
+		}
+	}(db)
 }
 
 func Migrate() {
@@ -49,7 +55,12 @@ func Migrate() {
 
 	db := helpers.ConnectDB()
 	db.AutoMigrate(&User, &Account)
-	defer db.Close()
+	defer func(db *gorm.DB) {
+		err := db.Close()
+		if err != nil {
+			helpers.HandleErr(err)
+		}
+	}(db)
 
 	createAccounts()
 }
