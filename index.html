@@ -3,27 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <script crossorigin="anonymous" src="script.js"></script>
+  <script crossorigin="anonymous" src="app.js"></script>
 </head>
 <body>
 <form id="form" onsubmit="handleSubmit(event)">
-  <input name="username" placeholder="Username">
-  <input name="email" placeholder="Email">
-  <input name="password" placeholder="Password">
+  <label>
+    <input name="username" placeholder="Username">
+  </label>
+  <label>
+    <input name="email" placeholder="Email">
+  </label>
+  <label>
+    <input name="password" placeholder="Password">
+  </label>
   <button type="submit">Register</button>
 </form>
 <br>
 <form id="formLogin" onsubmit="handleSubmitLogin(event)">
-  <input name="username" placeholder="Username">
-  <input name="password" placeholder="Password">
+  <label>
+    <input name="username" placeholder="Username">
+  </label>
+  <label>
+    <input name="password" placeholder="Password">
+  </label>
   <button type="submit">Login</button>
 </form>
 <br>
 <form id="formTransaction" onsubmit="handleSubmitTransaction(event)">
-  <input name="userId" placeholder="UserId">
-  <input name="from" placeholder="From">
-  <input name="to" placeholder="To">
-  <input name="amount" placeholder="amount">
+  <label>
+    <input name="userId" placeholder="UserId">
+  </label>
+  <label>
+    <input name="from" placeholder="From">
+  </label>
+  <label>
+    <input name="to" placeholder="To">
+  </label>
+  <label>
+    <input name="amount" placeholder="amount">
+  </label>
   <button type="submit">Register</button>
 </form>
 <script>
