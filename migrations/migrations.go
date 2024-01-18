@@ -64,3 +64,16 @@ func Migrate() {
 
 	createAccounts()
 }
+
+func MigrateTransactions() {
+	Transactions := &interfaces.Transaction{}
+
+	db := helpers.ConnectDB()
+	db.AutoMigrate(&Transactions)
+	defer func(db *gorm.DB) {
+		err := db.Close()
+		if err != nil {
+			helpers.HandleErr(err)
+		}
+	}(db)
+}

@@ -1,6 +1,8 @@
 package interfaces
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -37,4 +39,11 @@ type Validation struct {
 
 type ErrResponse struct {
 	Message string
+}
+
+type Transaction struct {
+	gorm.Model
+	From   uint
+	To     uint
+	Amount int
 }
