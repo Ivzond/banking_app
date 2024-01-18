@@ -6,6 +6,7 @@ import (
 	"fintech_app/useraccounts"
 	"fintech_app/users"
 	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"io"
 	"log"
@@ -122,11 +123,21 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 
 func StartApi() {
 	router := mux.NewRouter()
-	router.Use(helpers.PanicHandler)
+
 	router.HandleFunc("/login", login).Methods("POST")
 	router.HandleFunc("/register", register).Methods("POST")
 	router.HandleFunc("/transaction", transaction).Methods("POST")
 	router.HandleFunc("/user/{id}", getUser).Methods("GET")
+
+	// Use PanicHandler from helpers
+	handler := helpers.PanicHandler(router)
+
+	// Enable CORS
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
+	// Start the server with CORS handling
 	fmt.Println("App is working on port :8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(originsOk, headersOk, methodsOk)(handler)))
 }
