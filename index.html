@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script crossorigin="anonymous" src="script.js"></script>
+</head>
+<body>
+<form id="form" onsubmit="handleSubmit(event)">
+  <input name="username" placeholder="Username">
+  <input name="email" placeholder="Email">
+  <input name="password" placeholder="Password">
+  <button type="submit">Register</button>
+</form>
+<br>
+<form id="formLogin" onsubmit="handleSubmitLogin(event)">
+  <input name="username" placeholder="Username">
+  <input name="password" placeholder="Password">
+  <button type="submit">Login</button>
+</form>
+<br>
+<form id="formTransaction" onsubmit="handleSubmitTransaction(event)">
+  <input name="userId" placeholder="UserId">
+  <input name="from" placeholder="From">
+  <input name="to" placeholder="To">
+  <input name="amount" placeholder="amount">
+  <button type="submit">Register</button>
+</form>
+<script>
+  function handleSubmit(event) {
+    event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+    const data = {
+      username: form.username.value,
+      email: form.email.value,
+      password: form.password.value
+    };
+
+    register(data);
+  }
+
+  function register(data) {
+    const url = 'http://localhost:8080/register';
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    };
+
+    fetch(url, options)
+            .then(response => {
+              if (response.status === 200) {
+                alert('Success!');
+              } else {
+                alert('Something went wrong!');
+              }
+            })
+            .catch(error => {
+              alert('Something went wrong!');
+            });
+  }
+  function handleSubmitLogin(event) {
+    event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+    const data = {
+      username: formLogin.username.value,
+      password: formLogin.password.value
+    };
+
+    login(data);
+  }
+  function login(data) {
+    const url = 'http://localhost:8080/login';
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+
+    };
+
+    fetch(url, options)
+            .then(response => {
+              if (response.status === 200) {
+                alert('Success!');
+                return response.json();
+
+              } else {
+                alert('Something went wrong!');
+              }
+            })
+            .then( data =>{
+              let jwtToken = data.jwt;
+              localStorage.setItem('jwt',jwtToken);
+            } )
+            .catch(error => {
+              alert('Something went wrong!');
+            });
+  }
+function handleSubmitTransaction(event) {
+  event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+  const data = {
+    UserID: parseInt(formTransaction.userId.value),
+    From: parseInt(formTransaction.from.value),
+    To: parseInt(formTransaction.to.value),
+    Amount: Number.parseInt(formTransaction.amount.value),
+  };
+
+  transaction(data);
+}
+function transaction(data){
+  const jwt = localStorage.getItem('jwt');
+  if(jwt === undefined || null){
+    alert("GDE JWT???");
+    return;
+  }
+  data.Amount = parseInt(data.Amount);
+  data.UserID = parseInt(data.UserID);
+  data.From = parseInt(data.From);
+  data.To = parseInt(data.To);
+  const url = 'http://localhost:8080/transaction';
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': jwt,
+    },
+
+    body: JSON.stringify(data)
+  };
+  fetch(url,options).then( (response) =>{
+    if (response.status === 200){
+      alert("ZAEBIS!");
+    }
+    else{
+      alert("XUETA");
+    }
+  } )
+          .catch( (error) =>{
+            alert("XUEVO!");
+          } )
+}
+</script>
+</body>
+</html>
