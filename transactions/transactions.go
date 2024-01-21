@@ -4,15 +4,17 @@ import (
 	"fintech_app/database"
 	"fintech_app/helpers"
 	"fintech_app/interfaces"
+	"github.com/jinzhu/gorm"
 )
 
-func CreateTransaction(From uint, To uint, Amount int) {
+// CreateTransactionWithinTransaction creates a new transaction within a transaction
+func CreateTransactionWithinTransaction(tx *gorm.DB, From uint, To uint, Amount int) {
 	transaction := &interfaces.Transaction{
 		From:   From,
 		To:     To,
 		Amount: Amount,
 	}
-	database.DB.Create(transaction)
+	tx.Create(transaction)
 }
 
 func GetTransactionsByAccount(id uint) []interfaces.ResponseTransaction {

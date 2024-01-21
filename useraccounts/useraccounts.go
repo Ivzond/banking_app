@@ -6,15 +6,16 @@ import (
 	"fintech_app/interfaces"
 	"fintech_app/transactions"
 	"fmt"
+	"github.com/jinzhu/gorm"
 )
 
-func updateAccount(id uint, amount int) interfaces.ResponseAccount {
+func updateAccountWithinTransaction(tx *gorm.DB, id uint, amount int) interfaces.ResponseAccount {
 	account := interfaces.Account{}
 	responseAcc := interfaces.ResponseAccount{}
 
-	database.DB.Where("id = ?", id).First(&account)
+	tx.Where("id = ?", id).First(&account)
 	account.Balance = uint(amount)
-	database.DB.Save(&account)
+	tx.Save(&account)
 
 	responseAcc.ID = account.ID
 	responseAcc.Name = account.Name
@@ -44,10 +45,27 @@ func Transaction(userId uint, from uint, to uint, amount int, jwt string) map[st
 		} else if int(fromAccount.Balance) < amount {
 			return map[string]interface{}{"message": "Not enough money on the account"}
 		}
-		updatedAccount := updateAccount(from, int(fromAccount.Balance)-amount)
-		updateAccount(to, int(toAccount.Balance)+amount)
 
-		transactions.CreateTransaction(from, to, amount)
+		// Start a new database transaction
+		tx := database.DB.Begin()
+
+		// Defer a function to handle transaction rollback in case of error
+		defer func() {
+			if r := recover(); r != nil {
+				// Something went wrong, rollback the transaction
+				tx.Rollback()
+			}
+		}()
+
+		// Update the account balances within the transaction
+		updatedAccount := updateAccountWithinTransaction(tx, from, int(fromAccount.Balance)-amount)
+		updateAccountWithinTransaction(tx, to, int(toAccount.Balance)+amount)
+
+		// Use the new transaction service
+		transactions.CreateTransactionWithinTransaction(tx, from, to, amount)
+
+		// Commit the transaction if everything is successful
+		tx.Commit()
 
 		var response = map[string]interface{}{"message": "OK"}
 		response["data"] = updatedAccount
