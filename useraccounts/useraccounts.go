@@ -1,46 +1,32 @@
 package useraccounts
 
 import (
+	"fintech_app/database"
 	"fintech_app/helpers"
 	"fintech_app/interfaces"
 	"fintech_app/transactions"
 	"fmt"
-	"github.com/jinzhu/gorm"
 )
 
 func updateAccount(id uint, amount int) interfaces.ResponseAccount {
-	db := helpers.ConnectDB()
 	account := interfaces.Account{}
 	responseAcc := interfaces.ResponseAccount{}
 
-	db.Where("id = ?", id).First(&account)
+	database.DB.Where("id = ?", id).First(&account)
 	account.Balance = uint(amount)
-	db.Save(&account)
+	database.DB.Save(&account)
 
 	responseAcc.ID = account.ID
 	responseAcc.Name = account.Name
 	responseAcc.Balance = account.Balance
-	defer func(db *gorm.DB) {
-		err := db.Close()
-		if err != nil {
-			helpers.HandleErr(err)
-		}
-	}(db)
 	return responseAcc
 }
 
 func getAccount(id uint) *interfaces.Account {
-	db := helpers.ConnectDB()
 	account := &interfaces.Account{}
-	if db.Where("id = ?", id).First(&account).RecordNotFound() {
+	if database.DB.Where("id = ?", id).First(&account).RecordNotFound() {
 		return nil
 	}
-	defer func(db *gorm.DB) {
-		err := db.Close()
-		if err != nil {
-			helpers.HandleErr(err)
-		}
-	}(db)
 	return account
 }
 

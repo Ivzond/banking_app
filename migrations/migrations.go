@@ -1,15 +1,13 @@
 package migrations
 
 import (
+	"fintech_app/database"
 	"fintech_app/helpers"
 	"fintech_app/interfaces"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func createAccounts() {
-	db := helpers.ConnectDB()
-
 	users := &[3]interfaces.User{
 		{
 			Username: "Olga",
@@ -31,7 +29,7 @@ func createAccounts() {
 			Email:    users[i].Email,
 			Password: generatePassword,
 		}
-		db.Create(&user)
+		database.DB.Create(&user)
 
 		account := &interfaces.Account{
 			Type:    "Credit account",
@@ -39,41 +37,15 @@ func createAccounts() {
 			Balance: uint(1000 * (i + 1)),
 			UserID:  user.ID,
 		}
-		db.Create(&account)
+		database.DB.Create(&account)
 	}
-	defer func(db *gorm.DB) {
-		err := db.Close()
-		if err != nil {
-			helpers.HandleErr(err)
-		}
-	}(db)
 }
 
 func Migrate() {
 	User := &interfaces.User{}
 	Account := &interfaces.Account{}
-
-	db := helpers.ConnectDB()
-	db.AutoMigrate(&User, &Account)
-	defer func(db *gorm.DB) {
-		err := db.Close()
-		if err != nil {
-			helpers.HandleErr(err)
-		}
-	}(db)
+	Transactions := &interfaces.Transaction{}
+	database.DB.AutoMigrate(&User, &Account, Transactions)
 
 	createAccounts()
-}
-
-func MigrateTransactions() {
-	Transactions := &interfaces.Transaction{}
-
-	db := helpers.ConnectDB()
-	db.AutoMigrate(&Transactions)
-	defer func(db *gorm.DB) {
-		err := db.Close()
-		if err != nil {
-			helpers.HandleErr(err)
-		}
-	}(db)
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fintech_app/helpers"
+	"fintech_app/transactions"
 	"fintech_app/useraccounts"
 	"fintech_app/users"
 	"fmt"
@@ -121,12 +122,22 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	apiResponse(transaction, w)
 }
 
+func getMyTransactions(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userId := vars["userID"]
+	auth := r.Header.Get("Authorization")
+
+	userTransactions := transactions.GetMyTransactions(userId, auth)
+	apiResponse(userTransactions, w)
+}
+
 func StartApi() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/login", login).Methods("POST")
 	router.HandleFunc("/register", register).Methods("POST")
 	router.HandleFunc("/transaction", transaction).Methods("POST")
+	router.HandleFunc("/transaction/{userID}", getMyTransactions).Methods("GET")
 	router.HandleFunc("/user/{id}", getUser).Methods("GET")
 
 	// Use PanicHandler from helpers

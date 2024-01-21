@@ -1,8 +1,11 @@
 package main
 
-import "fintech_app/api"
+import (
+	"fintech_app/api"
+	"fintech_app/database"
+)
 
 func main() {
-	//migrations.MigrateTransactions()
+	database.InitDatabase()
 	api.StartApi()
 }
