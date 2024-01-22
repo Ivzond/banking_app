@@ -135,10 +135,108 @@ func StartApi() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/login", login).Methods("POST")
+	/*
+		params:
+			username: string
+			email: string
+			password: string
+
+		returns:
+			"data": {
+				"ID": int,
+				"Username": "string",
+				"Email": "string",
+				"Accounts": [
+							{
+								"ID": int,
+								"Name": "string",
+								"Balance": int
+							}
+							]
+					},
+			"jwt": "string",
+			"message": "OK"
+	*/
 	router.HandleFunc("/register", register).Methods("POST")
+	/*
+		params:
+			username: string
+			email: string
+			password: string
+
+		returns:
+			"data": {
+				"ID": int,
+				"Username": "string",
+				"Email": "string",
+				"Accounts": [
+							{
+								"ID": int,
+								"Name": "string",
+								"Balance": int
+							}
+							]
+						},
+				"jwt": "string",
+				"message": "OK"
+				}
+			}
+	*/
 	router.HandleFunc("/transaction", transaction).Methods("POST")
+	/*
+		params:
+			UserID: uint
+			From: uint
+			To: uint
+			Amount: int
+
+		returns:
+			"data": {
+				"ID": int,
+				"Name": "string",
+				"Balance": int,
+				},
+			"message": "OK"
+	*/
 	router.HandleFunc("/transaction/{userID}", getMyTransactions).Methods("GET")
+	/*
+			Получает айдишник юзера в руте
+			Возвращает массив data со структурками транзакций и мессэдж ОК
+		returns
+			data: [
+					{
+						"ID": uint,
+						"From": "uint",
+						"To": "uint",
+						"Amount": "int"
+					},
+					{...},
+					...
+				  ],
+			"message": "OK"
+
+	*/
 	router.HandleFunc("/user/{id}", getUser).Methods("GET")
+	/*
+		Получает айдишник юзера в руте
+		Возвращает почти то же что и для login/register, только без jwt очевидно
+
+		returns:
+			"data": {
+						"ID": int,
+						"Username": "string",
+						"Email": "string",
+						"Accounts": [
+									{
+										"ID": int,
+										"Name": "string",
+										"Balance": int
+									}
+									]
+					},
+			"message": "OK"
+
+	*/
 
 	// Use PanicHandler from helpers
 	handler := helpers.PanicHandler(router)
