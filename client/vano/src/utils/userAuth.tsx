@@ -6,7 +6,7 @@ export async function userLogin (data:IUserLogin) {
         const response = await axios.post('http://localhost:8080/login', data);
         const responseData = response.data;
         localStorage.setItem('jwt',responseData.jwt);
-        localStorage.setItem('user',JSON.stringify(responseData.user));
+        localStorage.setItem('user',JSON.stringify(responseData.data));
 
     }
     catch (error: any)

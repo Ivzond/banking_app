@@ -25,7 +25,7 @@ const LoginForm: React.FC = () => {
                 size='small'
                 id="username"
                 type='text'
-                placeholder="vasya"
+                placeholder="Your username"
                 {...register('username', { required: true })}
             />
             <InputLabel  className='login-form-password-label'>Password</InputLabel>
@@ -33,7 +33,7 @@ const LoginForm: React.FC = () => {
                 className='login-form-password-input'
                 size='small'
                 id='password'
-                placeholder=""
+                placeholder="Your password"
                 type='password'
                 {...register('password', { required: true })}
             />
