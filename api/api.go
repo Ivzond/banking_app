@@ -41,17 +41,73 @@ func readBody(r *http.Request) []byte {
 	return body
 }
 
-func apiResponse(call map[string]interface{}, w http.ResponseWriter) {
+func authApiResponse(call map[string]interface{}, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
-
 	var statusCode int
-
 	if call["message"] == "OK" {
 		statusCode = http.StatusOK
+	} else if call["message"] == "User not found" {
+		statusCode = http.StatusNotFound
 	} else {
 		statusCode = http.StatusBadRequest
 	}
+	w.WriteHeader(statusCode)
 
+	resp := call
+	err := json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		helpers.HandleErr(err)
+	}
+}
+
+func getUserApiResponse(call map[string]interface{}, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	var statusCode int
+	if call["message"] == "OK" {
+		statusCode = http.StatusOK
+	} else if call["message"] == "Not valid token" {
+		statusCode = http.StatusUnauthorized
+	} else {
+		statusCode = http.StatusNotFound
+	}
+	w.WriteHeader(statusCode)
+
+	resp := call
+	err := json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		helpers.HandleErr(err)
+	}
+}
+
+func getTransactionsApiResponse(call map[string]interface{}, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	var statusCode int
+	if call["message"] == "OK" {
+		statusCode = http.StatusOK
+	} else if call["message"] == "Not valid token" {
+		statusCode = http.StatusUnauthorized
+	}
+	w.WriteHeader(statusCode)
+
+	resp := call
+	err := json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		helpers.HandleErr(err)
+	}
+}
+
+func transactionApiResponse(call map[string]interface{}, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	var statusCode int
+	if call["message"] == "OK" {
+		statusCode = http.StatusOK
+	} else if call["message"] == "Account not found" {
+		statusCode = http.StatusNotFound
+	} else if call["message"] == "Your are not the owner of the account" || call["message"] == "Not valid token" {
+		statusCode = http.StatusUnauthorized
+	} else {
+		statusCode = http.StatusBadRequest
+	}
 	w.WriteHeader(statusCode)
 
 	resp := call
@@ -70,13 +126,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
-		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		authApiResponse(map[string]interface{}{}, w)
 		return
 	}
 
 	login := users.Login(formattedBody.Username, formattedBody.Password)
-
-	apiResponse(login, w)
+	authApiResponse(login, w)
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
@@ -88,14 +143,12 @@ func register(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
-		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		authApiResponse(map[string]interface{}{}, w)
 		return
 	}
 
 	register := users.Register(formattedBody.Username, formattedBody.Email, formattedBody.Password)
-
-	// Check if all is fine and prepare response
-	apiResponse(register, w)
+	authApiResponse(register, w)
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
@@ -104,7 +157,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Authorization")
 
 	user := users.GetUser(userId, auth)
-	apiResponse(user, w)
+	getUserApiResponse(user, w)
 }
 
 func transaction(w http.ResponseWriter, r *http.Request) {
@@ -117,7 +170,7 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
-		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		transactionApiResponse(map[string]interface{}{}, w)
 		return
 	}
 	transaction := useraccounts.Transaction(
@@ -127,7 +180,7 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 		formattedBody.Amount,
 		auth,
 	)
-	apiResponse(transaction, w)
+	transactionApiResponse(transaction, w)
 }
 
 func getMyTransactions(w http.ResponseWriter, r *http.Request) {
@@ -136,7 +189,7 @@ func getMyTransactions(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Authorization")
 
 	userTransactions := transactions.GetMyTransactions(userId, auth)
-	apiResponse(userTransactions, w)
+	getTransactionsApiResponse(userTransactions, w)
 }
 
 func StartApi() {
