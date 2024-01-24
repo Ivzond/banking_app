@@ -42,18 +42,22 @@ func readBody(r *http.Request) []byte {
 }
 
 func apiResponse(call map[string]interface{}, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var statusCode int
+
 	if call["message"] == "OK" {
-		resp := call
-		err := json.NewEncoder(w).Encode(resp)
-		if err != nil {
-			helpers.HandleErr(err)
-		}
+		statusCode = http.StatusOK
 	} else {
-		resp := call
-		err := json.NewEncoder(w).Encode(resp)
-		if err != nil {
-			helpers.HandleErr(err)
-		}
+		statusCode = http.StatusBadRequest
+	}
+
+	w.WriteHeader(statusCode)
+
+	resp := call
+	err := json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		helpers.HandleErr(err)
 	}
 }
 
@@ -66,11 +70,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
+		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		return
 	}
 
 	login := users.Login(formattedBody.Username, formattedBody.Password)
 
-	// Check if all is fine and prepare response
 	apiResponse(login, w)
 }
 
@@ -83,6 +88,8 @@ func register(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
+		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		return
 	}
 
 	register := users.Register(formattedBody.Username, formattedBody.Email, formattedBody.Password)
@@ -110,8 +117,9 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(body, &formattedBody)
 	if err != nil {
 		helpers.HandleErr(err)
+		apiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
+		return
 	}
-
 	transaction := useraccounts.Transaction(
 		formattedBody.UserID,
 		formattedBody.From,
