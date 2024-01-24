@@ -14,10 +14,13 @@ export async function userLogin (data:IUserLogin) {
         alert("Error while login. Try again");
 
     }
-};
+}
 export async function userRegister (data:IUserRegister) {
     try {
         const response = await axios.post('http://localhost:8080/register', data);
+        const responseData = response.data;
+        localStorage.setItem('jwt',responseData.jwt);
+        localStorage.setItem('user',JSON.stringify(responseData.data));
         alert("Register completed");
 
     }

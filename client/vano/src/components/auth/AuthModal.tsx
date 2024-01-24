@@ -1,15 +1,16 @@
-import React, { FC, useState } from 'react';
+// src/components/auth/AuthModal.tsx
+import React, { FC } from 'react';
 import { Modal, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import RegisterForm from '../forms/RegisterForm'; // Update the path as per your project structure
+import LoginForm from '../forms/LoginForm'; // Import your login form here
 import { useTheme } from '@mui/material/styles';
 
-interface RegisterModalProps {
+interface AuthModalProps {
     isOpen: boolean;
-    onClose: any;
+    onClose: () => void;
 }
 
-const RegisterModal: FC<RegisterModalProps> = ({ isOpen, onClose }) => {
+const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
     const theme = useTheme();
 
     return (
@@ -43,10 +44,10 @@ const RegisterModal: FC<RegisterModalProps> = ({ isOpen, onClose }) => {
                 >
                     <CloseIcon />
                 </IconButton>
-                <RegisterForm />
+                <LoginForm />
             </Box>
         </Modal>
     );
 };
 
-export default RegisterModal;
+export default AuthModal;
