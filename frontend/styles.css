@@ -1,0 +1,73 @@
+body {
+    font-family: Ubuntu, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff3a7;
+}
+
+header {
+    background-color: #e2ff5e;
+    color: #4b0000;
+    padding: 10px;
+    text-align: center;
+}
+
+main {
+    max-width: 800px;
+    max-height: 2000px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #ffeedb;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color: #97b900;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #083b00;
+}
+
+.auth-buttons {
+    display: flex;
+    column-gap: 50px;
+    place-content: center;
+    margin-bottom: 10px;
+}
+
+.transaction-buttons {
+    display: flex;
+    column-gap: 50px;
+    place-content: center;
+    margin-bottom: 10px;
+}
+
+#user-info {
+    display: block;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#transactions-list {
+    display: block;
+    margin-top: 20px;
+    text-align: left;
+}
