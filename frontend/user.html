@@ -27,7 +27,23 @@
     <div class = "transaction-buttons">
         <button onclick="showTransactionForm()">Сделать перевод по ID аккаунта</button>
         <button onclick="getUserTransactions()">Посмотреть историю переводов</button>
+        <button onclick="showCreateAccountForm()">Создать новый аккаунт</button>
     </div>
+
+    <form id="create-account-form" style="display: none;">
+        <label for="account-type">Account Type:</label>
+        <select id="account-type" required>
+            <option value="Daily">Daily</option>
+            <option value="Credit">Credit</option>
+        </select>
+
+        <label for="account-name">Account Name:</label>
+        <input type="text" id="account-name" placeholder="Account Name" required>
+
+        <div id="create-account-message"></div>
+
+        <button type="button" onclick="createAccount()">Create Account</button>
+    </form>
 
     <div id="transactions-list">
         <!-- Display transactions here -->

@@ -1,6 +1,7 @@
 let userId;
 let isTransactionFormVisible = false
 let isTransactionsListVisible = false
+let isCreateAccountFormVisible = false
 
 document.addEventListener("DOMContentLoaded", function () {
     // Load user information from local storage
@@ -29,6 +30,9 @@ function displayUserAccounts(accounts) {
     accountsContainer.innerHTML = '';
 
     if (accounts && accounts.length > 0) {
+        // Sort accounts by ID
+        accounts.sort((a, b) => a.ID - b.ID);
+
         const accountsList = document.createElement('ul');
 
         // Loop through each account and create list items
@@ -62,6 +66,7 @@ function showTransactionForm() {
     transactionForm.style.display = isTransactionFormVisible ? 'block' : 'none';
 
     hideTransactionList();
+    hideCreateAccountForm();
 }
 
 function hideTransactionList() {
@@ -87,6 +92,10 @@ function makeTransaction() {
         .then(response => {
             // Display the response message based on the status code
             displayResponseMessage(response.status);
+
+            if (response.status === 200) {
+                updateAccounts();
+            }
 
             return response.json()
         })
@@ -132,6 +141,7 @@ function getUserTransactions() {
     transactionsList.style.display = isTransactionsListVisible ? 'block' : 'none';
 
     hideTransactionForm();
+    hideCreateAccountForm();
 
     fetch(`http://localhost:8080/transaction/${userId}`, {
         method: 'GET',
@@ -161,6 +171,9 @@ function displayTransactions(transactions) {
     transactionsContainer.innerHTML = '';
 
     if (transactions && transactions.length > 0) {
+        // Sort transactions by From ID
+        transactions.sort((a, b) => a.From - b.From);
+
         const transactionsList = document.createElement('ul');
 
         // Loop through each transaction and create list items
@@ -176,4 +189,93 @@ function displayTransactions(transactions) {
         // Display a message if there are no transactions
         transactionsContainer.innerHTML = '<p>No transactions found.</p>';
     }
+}
+
+function showCreateAccountForm() {
+    // Toggle the visibility of the create account form
+    isCreateAccountFormVisible = !isCreateAccountFormVisible
+    const createAccountForm = document.getElementById('create-account-form');
+    createAccountForm.style.display = isCreateAccountFormVisible ? 'block' : 'none';
+
+    hideTransactionList();
+    hideTransactionForm();
+}
+
+function hideCreateAccountForm() {
+    isCreateAccountFormVisible = false;
+    const createAccountForm = document.getElementById('create-account-form');
+    createAccountForm.style.display = 'none';
+}
+
+function createAccount() {
+    const accountType = document.getElementById('account-type').value;
+    const accountName = document.getElementById('account-name').value;
+
+    fetch('http://localhost:8080/account', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+        },
+        body: JSON.stringify({ userID: userId, type: accountType, name: accountName }),
+    })
+        .then(response => {
+            // Display the response message based on the status code
+            displayCreateAccountMessage(response.status);
+
+            if (response.status === 200) {
+                updateAccounts();
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            // Handle the response data, update UI accordingly
+            console.log(data);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function displayCreateAccountMessage(statusCode) {
+    const messageContainer = document.getElementById('create-account-message');
+
+    messageContainer.innerHTML = '';
+
+    // Create a message based on the status code
+    let message;
+    switch (statusCode) {
+        case 200:
+            message = 'Account created successfully!';
+            break;
+        case 400:
+            message = 'Bad request. Please check your input.';
+            break;
+        case 401:
+            message = 'Not authorized. Please log in again.';
+            break;
+        case 404:
+            message = 'User not found.';
+            break;
+        default:
+            message = 'Unexpected error. Please try again later.';
+    }
+
+    const messageElement = document.createElement('p');
+    messageElement.textContent = message;
+    messageContainer.appendChild(messageElement);
+}
+
+function updateAccounts() {
+    fetch(`http://localhost:8080/user/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const updatedAccounts = data.data.Accounts;
+            displayUserAccounts(updatedAccounts);
+        })
+        .catch(error => console.error('Error:', error));
 }
