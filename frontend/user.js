@@ -6,12 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load user information from local storage
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     userId = userInfo.ID;
+    const name = userInfo.Name;
     const username = userInfo.Username;
     const email = userInfo.Email;
     const accounts = userInfo.Accounts; // Array of user's accounts
 
     // Display user information on the page
     document.getElementById('user-username').innerText = username;
+    document.getElementById('user-name').innerText = name;
     document.getElementById('user-username-info').innerText = username;
     document.getElementById('user-email').innerText = email;
 

@@ -6,6 +6,7 @@ import (
 
 type User struct {
 	gorm.Model
+	Name     string
 	Username string
 	Email    string
 	Password string
@@ -41,6 +42,7 @@ type ResponseAccount struct {
 
 type ResponseUser struct {
 	ID       uint
+	Name     string
 	Username string
 	Email    string
 	Accounts []ResponseAccount

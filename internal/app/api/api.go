@@ -2,10 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"fintech_app/helpers"
-	"fintech_app/transactions"
-	"fintech_app/useraccounts"
-	"fintech_app/users"
+	"fintech_app/internal/pkg/helpers"
+	"fintech_app/internal/pkg/transactions"
+	"fintech_app/internal/pkg/useraccounts"
+	"fintech_app/internal/pkg/users"
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -20,6 +20,7 @@ type Login struct {
 }
 
 type Register struct {
+	Name     string
 	Username string
 	Email    string
 	Password string
@@ -147,7 +148,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	register := users.Register(formattedBody.Username, formattedBody.Email, formattedBody.Password)
+	register := users.Register(formattedBody.Name, formattedBody.Username, formattedBody.Email, formattedBody.Password)
 	authApiResponse(register, w)
 }
 

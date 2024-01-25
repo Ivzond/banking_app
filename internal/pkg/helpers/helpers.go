@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
-	"fintech_app/interfaces"
+	"fintech_app/internal/pkg/interfaces"
 	"github.com/dgrijalva/jwt-go"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"

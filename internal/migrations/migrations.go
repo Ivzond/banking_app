@@ -1,9 +1,9 @@
 package migrations
 
 import (
-	"fintech_app/database"
-	"fintech_app/helpers"
-	"fintech_app/interfaces"
+	"fintech_app/internal/pkg/database"
+	"fintech_app/internal/pkg/helpers"
+	"fintech_app/internal/pkg/interfaces"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 

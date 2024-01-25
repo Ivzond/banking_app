@@ -1,9 +1,9 @@
 package transactions
 
 import (
-	"fintech_app/database"
-	"fintech_app/helpers"
-	"fintech_app/interfaces"
+	"fintech_app/internal/pkg/database"
+	"fintech_app/internal/pkg/helpers"
+	"fintech_app/internal/pkg/interfaces"
 	"github.com/jinzhu/gorm"
 )
 

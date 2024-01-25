@@ -15,16 +15,18 @@
 <main id="main-section">
     <div id="user-info">
         <h2>Your Information</h2>
+        <div><strong>Name:</strong> <span id="user-name"></span></div>
         <div><strong>Username:</strong> <span id="user-username-info"></span></div>
         <div><strong>Email:</strong> <span id="user-email"></span></div>
 
+        <h2>Your accounts</h2>
         <div id="user-accounts"></div>
         <!-- Display more user information if needed -->
     </div>
 
     <div class = "transaction-buttons">
-        <button onclick="showTransactionForm()">Make Transaction</button>
-        <button onclick="getUserTransactions()">Get My Transactions</button>
+        <button onclick="showTransactionForm()">Сделать перевод по ID аккаунта</button>
+        <button onclick="getUserTransactions()">Посмотреть историю переводов</button>
     </div>
 
     <div id="transactions-list">

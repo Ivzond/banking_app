@@ -2,9 +2,9 @@ package users
 
 import (
 	"errors"
-	"fintech_app/database"
-	"fintech_app/helpers"
-	"fintech_app/interfaces"
+	"fintech_app/internal/pkg/database"
+	"fintech_app/internal/pkg/helpers"
+	"fintech_app/internal/pkg/interfaces"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -30,6 +30,7 @@ func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccoun
 	// Setup response
 	responseUser := &interfaces.ResponseUser{
 		ID:       user.ID,
+		Name:     user.Name,
 		Username: user.Username,
 		Email:    user.Email,
 		Accounts: accounts,
@@ -84,7 +85,7 @@ func Login(username string, pass string) map[string]interface{} {
 	}
 }
 
-func Register(username string, email string, pass string) map[string]interface{} {
+func Register(name string, username string, email string, pass string) map[string]interface{} {
 	// Validation to register
 	valid := helpers.Validation(
 		[]interfaces.Validation{
@@ -100,11 +101,16 @@ func Register(username string, email string, pass string) map[string]interface{}
 				Value: pass,
 				Valid: "password",
 			},
+			{
+				Value: name,
+				Valid: "name",
+			},
 		},
 	)
 	if valid {
 		generatedPassword := helpers.HashAndSalt([]byte(pass))
 		user := &interfaces.User{
+			Name:     name,
 			Username: username,
 			Email:    email,
 			Password: generatedPassword,

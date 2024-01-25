@@ -1,10 +1,10 @@
 package useraccounts
 
 import (
-	"fintech_app/database"
-	"fintech_app/helpers"
-	"fintech_app/interfaces"
-	"fintech_app/transactions"
+	"fintech_app/internal/pkg/database"
+	"fintech_app/internal/pkg/helpers"
+	"fintech_app/internal/pkg/interfaces"
+	"fintech_app/internal/pkg/transactions"
 	"fmt"
 	"github.com/jinzhu/gorm"
 )

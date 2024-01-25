@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fintech_app/helpers"
+	"fintech_app/internal/pkg/helpers"
 	"github.com/jinzhu/gorm"
 )
 

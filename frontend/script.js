@@ -77,6 +77,7 @@ function login() {
 }
 
 function register() {
+    const name = document.getElementById('register-name').value;
     const username = document.getElementById('register-username').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
@@ -86,7 +87,7 @@ function register() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ name, username, email, password }),
     })
         .then(response => {
             // Check if the response status is 200 (OK)
@@ -114,30 +115,4 @@ function register() {
             // Update the UI to show the error message to the user
             document.getElementById('register-error').innerText = error.message;
         });
-}
-
-function showTransactionForm() {
-    document.getElementById('user-info').style.display = 'none';
-    document.getElementById('transaction-form').style.display = 'block';
-}
-
-function makeTransaction() {
-    const from = document.getElementById('transaction-from').value;
-    const to = document.getElementById('transaction-to').value;
-    const amount = document.getElementById('transaction-amount').value;
-
-    fetch('http://localhost:8080/transaction', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_JWT_TOKEN', // Add the JWT token if required
-        },
-        body: JSON.stringify({ userID: 123, from, to, amount }), // Update with actual user ID
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response data, update UI accordingly
-            console.log(data);
-        })
-        .catch(error => console.error('Error:', error));
 }
