@@ -6,7 +6,7 @@ This is my simple banking application with server written on Go using gorilla/mu
 **General information**
 
 I used PostgreSQL as database for this project.
-The database consists of three tables: accounts, transactions and users. It is assumed that each user can have multiple accounts
+The database consists of three tables: accounts, transactions and users. It is assumed that each user can have multiple accounts.
 I've also used gorm models in my server logic to make communication with the database easier and more convenient.
 
 This app implements basic logic of bank app. You can register/login. Application privides jwt-authentication and passswords are hashed and salted before inserting to the database.
@@ -28,3 +28,8 @@ You can find main logic of application in fintech_app/internal/ folder.
 * golang.org/x/crypto
 * github.com/dgrijalva/jwt-go
 * PostgreSQL
+
+**The future of the project**
+
+Later, I plan to create a Docker container with app, so I can easily transport and share it and also run using Docker Compose.
+I also want to expand the functionality of the application.
