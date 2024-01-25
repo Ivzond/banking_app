@@ -74,3 +74,22 @@ func Transaction(userId uint, from uint, to uint, amount int, jwt string) map[st
 		return map[string]interface{}{"message": "Not valid token"}
 	}
 }
+
+func CreateAccount(userID uint, accountType string, accountName string) map[string]interface{} {
+	// You can perform any validation or additional checks here if needed.
+
+	// Create a new account
+	account := interfaces.Account{
+		Type:    accountType,
+		Name:    accountName,
+		Balance: 0,
+		UserID:  userID,
+	}
+
+	// Save the new account to the database
+	database.DB.Create(&account)
+
+	// Prepare and return the response
+	var response = map[string]interface{}{"message": "OK"}
+	return response
+}
