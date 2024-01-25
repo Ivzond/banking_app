@@ -37,9 +37,17 @@ func GetMyTransactions(id string, jwt string) map[string]interface{} {
 			Scan(&accounts)
 
 		var transactions []interfaces.ResponseTransaction
+		seenTransactions := make(map[uint]bool)
+
 		for i := 0; i < len(accounts); i++ {
 			accTransactions := GetTransactionsByAccount(accounts[i].ID)
-			transactions = append(transactions, accTransactions...)
+
+			for _, t := range accTransactions {
+				if _, exists := seenTransactions[t.ID]; !exists {
+					transactions = append(transactions, t)
+					seenTransactions[t.ID] = true
+				}
+			}
 		}
 
 		var response = map[string]interface{}{"message": "OK"}

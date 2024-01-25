@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const accounts = userInfo.Accounts; // Array of user's accounts
 
     // Display user information on the page
-    document.getElementById('user-username').innerText = username;
+    document.getElementById('user-username').innerText = name;
     document.getElementById('user-name').innerText = name;
     document.getElementById('user-username-info').innerText = username;
     document.getElementById('user-email').innerText = email;
