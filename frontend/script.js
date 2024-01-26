@@ -107,6 +107,9 @@ function register() {
                 // Store JWT token and user info in local storage
                 localStorage.setItem('jwt', data.jwt);
                 localStorage.setItem('userInfo', JSON.stringify(data.data));
+
+                // Redirect to user page
+                window.location.href = 'user.html';
             }
         })
         .catch(error => {

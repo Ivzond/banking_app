@@ -8,20 +8,20 @@
 </head>
 <body>
 <header>
-    <h1>Fintech App</h1>
+    <h1>Vano Bank</h1>
 </header>
 
 <main id="main-section">
     <div id="auth-section">
-        <h2>Authentication</h2>
+        <h2>Вход в кабинет</h2>
         <div class = "auth-buttons">
-            <button onclick="showLoginForm()">Login</button>
-            <button onclick="showRegisterForm()">Register</button>
+            <button onclick="showLoginForm()">Войти</button>
+            <button onclick="showRegisterForm()">Зарегистрироваться</button>
         </div>
 
         <form id="login-form" style="display: none;">
-            <input type="text" id="login-username" placeholder="Username" required>
-            <input type="password" id="login-password" placeholder="Password" required>
+            <input type="text" id="login-username" placeholder="Логин" required>
+            <input type="password" id="login-password" placeholder="Пароль" required>
             <button type="button" onclick="login()">Login</button>
         </form>
 
@@ -29,35 +29,16 @@
         <div id="login-error" style="color: #ff4b4b;"></div>
 
         <form id="register-form" style="display: none;">
-            <input type="text" id="register-name" placeholder="Surname and name" required>
-            <input type="text" id="register-username" placeholder="Username" required>
+            <input type="text" id="register-name" placeholder="Фамилия и имя" required>
+            <input type="text" id="register-username" placeholder="Логин" required>
             <input type="email" id="register-email" placeholder="Email" required>
-            <input type="password" id="register-password" placeholder="Password" required>
+            <input type="password" id="register-password" placeholder="Пароль" required>
             <button type="button" onclick="register()">Register</button>
         </form>
 
         <!-- Add register error div here -->
         <div id="register-error" style="color: #ff4b4b;"></div>
     </div>
-
-    <div id="user-info" style="display: none;">
-        <h2>User Information</h2>
-        <!-- Display user information here -->
-        <button onclick="showTransactionForm()">Make Transaction</button>
-    </div>
-
-    <form id="transaction-form" style="display: none;">
-        <label for="transaction-from">From:</label>
-        <input type="number" id="transaction-from" placeholder="Sender Account ID" required>
-
-        <label for="transaction-to">To:</label>
-        <input type="number" id="transaction-to" placeholder="Receiver Account ID" required>
-
-        <label for="transaction-amount">Amount:</label>
-        <input type="number" id="transaction-amount" placeholder="Amount" required>
-
-        <button type="button" onclick="makeTransaction()">Make Transaction</button>
-    </form>
 </main>
 
 <script src="script.js"></script>

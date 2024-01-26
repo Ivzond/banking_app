@@ -9,7 +9,7 @@
 <body>
 <header>
     <h1>Добро пожаловать, <span id="user-username"></span>!</h1>
-    <button onclick="logout()">Выйти из кабинета</button>
+    <button id="logout-button" onclick="logout()">Выйти из кабинета</button>
 </header>
 
 <main id="main-section">
@@ -31,18 +31,18 @@
     </div>
 
     <form id="create-account-form" style="display: none;">
-        <label for="account-type">Account Type:</label>
+        <label for="account-type">Тип аккаунта:</label>
         <select id="account-type" required>
-            <option value="Daily">Daily</option>
-            <option value="Credit">Credit</option>
+            <option value="Daily">Дебетовый</option>
+            <option value="Credit">Кредитный</option>
         </select>
 
-        <label for="account-name">Account Name:</label>
-        <input type="text" id="account-name" placeholder="Account Name" required>
+        <label for="account-name">Имя аккаунта:</label>
+        <input type="text" id="account-name" placeholder="Имя аккаунта" required>
 
         <div id="create-account-message"></div>
 
-        <button type="button" onclick="createAccount()">Create Account</button>
+        <button type="button" onclick="createAccount()">Создать аккаунт</button>
     </form>
 
     <div id="transactions-list">
@@ -50,18 +50,18 @@
     </div>
 
     <form id="transaction-form" style="display: none;">
-        <label for="transaction-from">From:</label>
+        <label for="transaction-from">От:</label>
         <input type="number" id="transaction-from" placeholder="Sender Account ID" required>
 
-        <label for="transaction-to">To:</label>
+        <label for="transaction-to">К:</label>
         <input type="number" id="transaction-to" placeholder="Receiver Account ID" required>
 
-        <label for="transaction-amount">Amount:</label>
-        <input type="number" id="transaction-amount" placeholder="Amount" required>
+        <label for="transaction-amount">Сумма:</label>
+        <input type="number" id="transaction-amount" placeholder="Сумма" required>
 
         <div id="response-message"></div>
 
-        <button type="button" onclick="makeTransaction()">Make Transaction</button>
+        <button type="button" onclick="makeTransaction()">Подтвердить</button>
     </form>
 </main>
 

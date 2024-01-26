@@ -7,14 +7,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load user information from local storage
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     userId = userInfo.ID;
-    const name = userInfo.Name;
+    const firstName = userInfo.Name.split(" ")[1];
+    const fullName = userInfo.Name
     const username = userInfo.Username;
     const email = userInfo.Email;
     const accounts = userInfo.Accounts; // Array of user's accounts
 
     // Display user information on the page
-    document.getElementById('user-username').innerText = name;
-    document.getElementById('user-name').innerText = name;
+    document.getElementById('user-username').innerText = firstName;
+    document.getElementById('user-name').innerText = fullName;
     document.getElementById('user-username-info').innerText = username;
     document.getElementById('user-email').innerText = email;
 
@@ -39,7 +40,7 @@ function displayUserAccounts(accounts) {
         accounts.forEach(account => {
             const listItem = document.createElement('li');
             listItem.style.marginBottom = '15px';
-            listItem.innerHTML = `<strong>Account ID:</strong> ${account.ID}, <strong>Name:</strong> ${account.Name}, <strong>Balance:</strong> ${account.Balance}`;
+            listItem.innerHTML = `<strong>ID аккаунта:</strong> ${account.ID}, <strong>Имя аккаунта:</strong> ${account.Name}, <strong>Баланс:</strong> ${account.Balance}`;
             accountsList.appendChild(listItem);
         });
 
@@ -115,19 +116,19 @@ function displayResponseMessage(statusCode) {
     let message;
     switch (statusCode) {
         case 200:
-            message = 'Transaction successful!';
+            message = 'Перевод успешно выполнен!';
             break;
         case 400:
-            message = 'Not enough money on balance';
+            message = 'Недостаточно средств на балансе';
             break;
         case 401:
-            message = 'You are not the owner of this account';
+            message = 'Это не ваш аккаунт';
             break;
         case 404:
-            message = 'Account not found.';
+            message = 'Аккаунт не найден';
             break;
         default:
-            message = 'Unexpected error. Please try again later.';
+            message = 'Непредвиденная ошибка. Попробуйте позднее';
     }
     const messageElement = document.createElement('p');
     messageElement.textContent = message;
@@ -179,7 +180,7 @@ function displayTransactions(transactions) {
         // Loop through each transaction and create list items
         transactions.forEach(transaction => {
             const listItem = document.createElement('li');
-            listItem.innerHTML = `<strong>From:</strong> ${transaction.From}, <strong>To:</strong> ${transaction.To}, <strong>Amount:</strong> ${transaction.Amount}`;
+            listItem.innerHTML = `<strong>От:</strong> ${transaction.From}, <strong>К:</strong> ${transaction.To}, <strong>Сумма:</strong> ${transaction.Amount}`;
             transactionsList.appendChild(listItem);
         });
 
@@ -187,7 +188,7 @@ function displayTransactions(transactions) {
         transactionsContainer.appendChild(transactionsList);
     } else {
         // Display a message if there are no transactions
-        transactionsContainer.innerHTML = '<p>No transactions found.</p>';
+        transactionsContainer.innerHTML = '<p>Транзакции не найдены.</p>';
     }
 }
 
@@ -245,19 +246,10 @@ function displayCreateAccountMessage(statusCode) {
     let message;
     switch (statusCode) {
         case 200:
-            message = 'Account created successfully!';
-            break;
-        case 400:
-            message = 'Bad request. Please check your input.';
-            break;
-        case 401:
-            message = 'Not authorized. Please log in again.';
-            break;
-        case 404:
-            message = 'User not found.';
+            message = 'Аккаунт успешно создан!';
             break;
         default:
-            message = 'Unexpected error. Please try again later.';
+            message = 'Непредвиденная ошибка. Попробуйте позднее';
     }
 
     const messageElement = document.createElement('p');
