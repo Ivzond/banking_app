@@ -8,7 +8,7 @@ import (
 )
 
 // CreateTransactionWithinTransaction creates a new transaction within a transaction
-func CreateTransactionWithinTransaction(tx *gorm.DB, From uint, To uint, Amount int) {
+func CreateTransactionWithinTransaction(tx *gorm.DB, From uint, To uint, Amount uint) {
 	transaction := &interfaces.Transaction{
 		From:   From,
 		To:     To,

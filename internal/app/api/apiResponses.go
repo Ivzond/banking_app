@@ -71,7 +71,7 @@ func transactionApiResponse(call map[string]interface{}, w http.ResponseWriter) 
 	} else if call["message"] == "Your are not the owner of the account" || call["message"] == "Not valid token" {
 		statusCode = http.StatusUnauthorized
 	} else {
-		statusCode = http.StatusBadRequest
+		statusCode = http.StatusInternalServerError
 	}
 	w.WriteHeader(statusCode)
 

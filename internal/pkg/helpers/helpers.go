@@ -57,7 +57,6 @@ func PanicHandler(next http.Handler) http.Handler {
 			err := recover()
 			if err != nil {
 				log.Println(err)
-
 				resp := interfaces.ErrResponse{Message: "Internal server error"}
 				err := json.NewEncoder(w).Encode(resp)
 				if err != nil {

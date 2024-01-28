@@ -24,7 +24,7 @@ type Transaction struct {
 	gorm.Model
 	From   uint
 	To     uint
-	Amount int
+	Amount uint
 }
 
 type ResponseTransaction struct {

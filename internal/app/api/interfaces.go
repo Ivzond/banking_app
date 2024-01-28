@@ -16,7 +16,7 @@ type TransactionBody struct {
 	UserID uint `json:"userId"`
 	From   uint `json:"from"`
 	To     uint `json:"to"`
-	Amount int  `json:"amount"`
+	Amount uint `json:"amount"`
 }
 
 type CreateAccountRequest struct {

@@ -9,7 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func updateAccountWithinTransaction(tx *gorm.DB, id uint, amount int) interfaces.ResponseAccount {
+func updateAccountWithinTransaction(tx *gorm.DB, id uint, amount uint) interfaces.ResponseAccount {
 	account := interfaces.Account{}
 	responseAcc := interfaces.ResponseAccount{}
 
@@ -31,7 +31,7 @@ func getAccount(id uint) *interfaces.Account {
 	return account
 }
 
-func Transaction(userId uint, from uint, to uint, amount int, jwt string) map[string]interface{} {
+func Transaction(userId uint, from uint, to uint, amount uint, jwt string) map[string]interface{} {
 	userIdString := fmt.Sprint(userId)
 	isValid := helpers.ValidateToken(userIdString, jwt)
 	if isValid {
@@ -42,7 +42,7 @@ func Transaction(userId uint, from uint, to uint, amount int, jwt string) map[st
 			return map[string]interface{}{"message": "Account not found"}
 		} else if fromAccount.UserID != userId {
 			return map[string]interface{}{"message": "Your are not the owner of the account"}
-		} else if int(fromAccount.Balance) < amount {
+		} else if fromAccount.Balance < amount {
 			return map[string]interface{}{"message": "Not enough money on the account"}
 		}
 
@@ -58,8 +58,8 @@ func Transaction(userId uint, from uint, to uint, amount int, jwt string) map[st
 		}()
 
 		// Update the account balances within the transaction
-		updatedAccount := updateAccountWithinTransaction(tx, from, int(fromAccount.Balance)-amount)
-		updateAccountWithinTransaction(tx, to, int(toAccount.Balance)+amount)
+		updatedAccount := updateAccountWithinTransaction(tx, from, fromAccount.Balance-amount)
+		updateAccountWithinTransaction(tx, to, toAccount.Balance+amount)
 
 		// Use the new transaction service
 		transactions.CreateTransactionWithinTransaction(tx, from, to, amount)
