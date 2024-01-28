@@ -13,7 +13,9 @@ func updateAccountWithinTransaction(tx *gorm.DB, id uint, amount uint) interface
 	account := interfaces.Account{}
 	responseAcc := interfaces.ResponseAccount{}
 
-	tx.Where("id = ?", id).First(&account)
+	// Using Set method with FOR UPDATE option to lock selected row
+	tx.Set("gorm:query_option", "FOR UPDATE").Order("id").Where("id = ?", id).First(&account)
+
 	account.Balance = amount
 	tx.Save(&account)
 
@@ -61,7 +63,7 @@ func Transaction(userId uint, from uint, to uint, amount uint, jwt string) map[s
 		updatedAccount := updateAccountWithinTransaction(tx, from, fromAccount.Balance-amount)
 		updateAccountWithinTransaction(tx, to, toAccount.Balance+amount)
 
-		// Use the new transaction service
+		// Create new transaction in the database
 		transactions.CreateTransactionWithinTransaction(tx, from, to, amount)
 
 		// Commit the transaction if everything is successful
