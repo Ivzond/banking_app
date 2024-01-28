@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+  app:
+    image: fintech_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: sh -c "sleep 1 && ./fintech_app"
+    environment:
+      - DATABASE_URL=postgres://postgres:12345678@db:5432/bankapp?sslmode=disable
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: bankapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/vano/bank_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
