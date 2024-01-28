@@ -14,7 +14,7 @@ func updateAccountWithinTransaction(tx *gorm.DB, id uint, amount uint) interface
 	responseAcc := interfaces.ResponseAccount{}
 
 	tx.Where("id = ?", id).First(&account)
-	account.Balance = uint(amount)
+	account.Balance = amount
 	tx.Save(&account)
 
 	responseAcc.ID = account.ID

@@ -61,7 +61,7 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	// Formatting request body
 	var formattedBody TransactionBody
 	err := json.Unmarshal(body, &formattedBody)
-	if err != nil {
+	if err != nil || formattedBody.Amount <= 0 {
 		//helpers.HandleErr(err)
 		transactionApiResponse(map[string]interface{}{"message": "Invalid request body"}, w)
 		return
