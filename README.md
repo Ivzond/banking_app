@@ -18,7 +18,7 @@ so they will lock the selected rows for update until the transaction is committe
 
 
 I've tried to organize structure of project according to best practises and Go project-layout.
-You can find main logic of application in fintech_app/internal/ folder.
+You can find main logic of application in banking_app/internal/ folder.
 
 **Technologies were used**
 
